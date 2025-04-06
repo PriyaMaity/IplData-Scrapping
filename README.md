@@ -1,5 +1,4 @@
 
-```markdown
 # 🏏 IPL Stats Scraper & Visualizer
 
 A project that scrapes IPL player stats from the official [IPL website](https://www.iplt20.com/stats) using **Puppeteer**, processes the data, and visualizes it using **Chart.js** in a beautiful dashboard.
