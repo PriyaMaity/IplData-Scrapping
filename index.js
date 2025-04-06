@@ -7,19 +7,16 @@ async function scrapeData(season) {
   const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
 
-  // Optional: Set a custom user agent
   await page.setUserAgent(
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
   );
 
-  // Navigate to URL and wait until network is idle
   await page.goto(url, { waitUntil: "networkidle2" });
 
-  // For debugging, log a snippet of the page content
+  //for debugging
   const htmlContent = await page.content();
   console.log("Page content snippet:", htmlContent.substring(0, 1000));
 
-  // Try waiting for a simpler selector first
   try {
     await page.waitForSelector("table.st-table", { timeout: 60000 });
   } catch (error) {
@@ -30,7 +27,6 @@ async function scrapeData(season) {
     throw error;
   }
 
-  // Now wait for table rows to be present
   try {
     await page.waitForFunction(
       () => {
@@ -47,7 +43,6 @@ async function scrapeData(season) {
     throw error;
   }
 
-  // Extract data (adjust the selectors as needed)
   const data = await page.evaluate(() => {
     const rows = Array.from(
       document.querySelectorAll("table.st-table tbody tr")
@@ -56,7 +51,6 @@ async function scrapeData(season) {
     const extractedData = rows
       .map((row) => {
         const cols = row.querySelectorAll("td");
-        // Skip row if there are not enough columns (for instance, a header row)
         if (!cols || cols.length < 7) return null;
 
         return {
